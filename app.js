@@ -21,12 +21,25 @@ parser.on('data', (data)=> {
     console.log("Data recieved");
     const JSONdata = JSON.parse(data);
     // use axios to send a POST request
-    axios({
-        method: 'POST',
-        url: serverURL,
-        data: JSONdata
-    })
-    .then(data=>console.log("Data sent"))
-    .catch(err=>console.log(err));
-    
+
+    // check if an alert needs to be sent.
+    if(JSONdata.hasOwnProperty("alert")){
+        console.log("Alert being sent!");
+        axios({
+            method: 'POST',
+            url: serverURL+"/alert",
+            data: JSONdata
+        })
+        .then(data=>console.log("Data sent"))
+        .catch(err=>console.log(err));
+    }
+    else{
+        axios({
+            method: 'POST',
+            url: serverURL,
+            data: JSONdata
+        })
+        .then(data=>console.log("Data sent"))
+        .catch(err=>console.log(err));
+    }
 });

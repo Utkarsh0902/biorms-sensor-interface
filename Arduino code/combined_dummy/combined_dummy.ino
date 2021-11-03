@@ -22,8 +22,8 @@ void updateValues() {
   while(pres_curr>= pres_threshold){
     // trigger a buzzer if required
     
-    Serial.println("{\"alert\":\"high pressure\"}");
-    Serial.print("{\"value\":"); Serial.print(pres_curr);Serial.println("}");
+    Serial.print("{\"alert\":\"high-pressure\",");
+    Serial.print("\"value\":"); Serial.print(pres_curr);Serial.println("}");
     //send an update again after 1 minute/ 30 seconds if the alert is still present.
     unsigned int alert_traget_time = millis() + 30000;
       while(pres_curr>= pres_threshold  && millis()< alert_traget_time){
