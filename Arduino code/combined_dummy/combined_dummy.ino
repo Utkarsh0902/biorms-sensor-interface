@@ -8,7 +8,7 @@ unsigned int pres_avg = 0, pres_count = 0;
 unsigned int humi_avg = 0, humi_count = 0;
 unsigned int ph_avg = 0, ph_count = 0;
 
-unsigned int pres_threshold = 8000; // CHANGE THE VALUE BASED ON SENSOR
+unsigned int pres_threshold = 0; // CHANGE THE VALUE BASED ON SENSOR
 
 void updateValues() {
   
@@ -21,9 +21,16 @@ void updateValues() {
   //check if alert needs to be called based on pressure value
   while(pres_curr>= pres_threshold){
     // trigger a buzzer if required
-    Serial.print("ALERT! HIGH PRESSURE: "); Serial.println(pres_curr);
-    //read the pressure value again
-    pres_curr = analogRead(A0);
+    
+    Serial.println("{\"alert\":\"high pressure\"}");
+    Serial.print("{\"value\":"); Serial.print(pres_curr);Serial.println("}");
+    //send an update again after 1 minute/ 30 seconds if the alert is still present.
+    unsigned int alert_traget_time = millis() + 30000;
+      while(pres_curr>= pres_threshold  && millis()< alert_traget_time){
+      //read the pressure value again
+      pres_curr = analogRead(A0);
+    }
+    
   }
   temp_avg = ((temp_count*temp_avg) + temp_curr)/(temp_count+1); temp_count++;
   pres_avg = ((pres_count*pres_avg) + pres_curr)/(pres_count+1); pres_count++;
@@ -66,4 +73,3 @@ void loop() {
     } 
   }
 }
-
